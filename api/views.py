@@ -6,11 +6,11 @@ from rest_framework.response import Response
 from .serializers import TaskSerializer
 from .models import Task
 
-# Create your views here.
+
 @api_view(['GET'])
 def apiOverView(request):
     api_urls = {
-        'Liest': '/task-list/',
+        'List': '/task-list/',
         'Detail View': '/task-detail/<str:pk>/',
         'Create': '/task-create/',
         'Update': '/task-update/<str:pk>/',
@@ -21,14 +21,14 @@ def apiOverView(request):
 
 @api_view(['GET'])
 def taskList(request):
-    tasks = Task.objects.all()
+    tasks = Task.objects.all().order_by('-id')
     serializer = TaskSerializer(tasks, many=True)
     return Response(serializer.data)
 
 @api_view(['GET'])
 def taskDetail(request,pk):
     task = Task.objects.get(id=pk)
-    serializer = TaskSerializer(tasks, many=False)
+    serializer = TaskSerializer(task, many=False)
     return Response(serializer.data)
 
 @api_view(['POST'])
